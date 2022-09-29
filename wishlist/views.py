@@ -16,10 +16,13 @@ from django.urls import reverse
 # Create your views here.
 def show_wishlist(request):
     data_barang_wishlist = BarangWishlist.objects.all()
+    user = request.user
     context = {
     'list_barang': data_barang_wishlist,
     'nama': 'Dianisa Wulandari',
-    'last_login': request.COOKIES['last_login']
+    'npm': 'NPM 2106702150',
+    'last_login': request.COOKIES['last_login'],
+    'user': user
 }
     return render(request, "wishlist.html", context)
 

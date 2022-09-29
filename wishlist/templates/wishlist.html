@@ -1,25 +1,47 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h5>Nama: </h5>
-<b>{{nama}}</b>
+<h5>By {{nama}} {{npm}}</h5> <br>
 
-<table>
-    <tr>
-    <th>Nama Barang</th>
-    <th>Harga Barang</th>
-    <th>Deskripsi</th>
-    </tr>
-    {% comment %} Tambahkan data di bawah baris ini {% endcomment %}
-    {% for barang in list_barang %}
+<nav class="navbar navbar-expand-lg bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="">WISHLIST</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="logout/">Logout</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="register/">Register</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <h2>Welcome! {{user.username}}</h2> <br>
+
+<table class="table table-striped w-auto">
+    <thead class="thead-dark">
         <tr>
-            <th>{{barang.nama_barang}}</th>
-            <th>{{barang.harga_barang}}</th>
-            <th>{{barang.deskripsi}}</th>
+          <th scope="col">Nama Barang</th>
+          <th scope="col">Harga Barang</th>
+          <th scope="col">Deskripsi</th>
         </tr>
-    {% endfor %}
+    </thead>
+    <tbody>
+        {% for barang in list_barang %}
+            <tr>
+                <th scope="row">{{barang.nama_barang}}</th>
+                <td>{{barang.harga_barang}}</td>
+                <td>{{barang.deskripsi}}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
 </table>
-<h5>Sesi terakhir login: {{ last_login }}</h5>
-<button><a href="{% url 'wishlist:logout' %}">Logout</a></button>
 
+<h5>Sesi terakhir login: {{ last_login }}</h5>
 {% endblock content %}

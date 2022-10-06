@@ -3,6 +3,8 @@ from wishlist.views import show_wishlist
 from wishlist.views import show_wishlist_xml
 from wishlist.views import show_wishlist_json
 from wishlist.views import show_wishlist_id
+from wishlist.views import show_wishlist_ajax
+from wishlist.views import tambah_wishlist
 from wishlist.views import register
 from wishlist.views import login_user
 from wishlist.views import logout_user
@@ -15,6 +17,8 @@ urlpatterns = [
     path('json/', show_wishlist_json, name='show_wishlist_json'),
     path('json/<int:id>', show_wishlist_id, name='show_wishlist_id'),
     path('xml/<int:id>', show_wishlist_id, name='show_wishlist_id'),
+    path('ajax/', show_wishlist_ajax, name='show_wishlist_ajax'),
+    path('ajax/submit/', tambah_wishlist, name='tambah_wishlist'),
     path('register/', register, name='register'),
     path('login/', login_user, name='login'),
     path('logout/', logout_user, name='logout')

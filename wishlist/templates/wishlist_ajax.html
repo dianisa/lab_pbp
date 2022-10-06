@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h5>By {{nama}} {{npm}}</h5> <br>
+
+<nav class="navbar navbar-expand-lg bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="">WISHLIST</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="logout/">Logout</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="register/">Register</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <h2>Welcome! {{user.username}}</h2> <br>
+
+<table class="table table-striped w-auto" id="wishlist_table">
+    <thead class="thead-dark">
+        <tr>
+          <th scope="col">Nama Barang</th>
+          <th scope="col">Harga Barang</th>
+          <th scope="col">Deskripsi</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<div>
+    <form id="submit_wishlist" method="POST">
+        {% csrf_token %}
+        <div class="col-mb-3">
+            <label class="form-label">Nama Barang</label>
+            <input type="text" class="form-control" placeholder="Masukkan nama barang" id="nama_barang" required>
+        </div>
+        <div class="col-mb-3">
+            <label class="form-label">Harga Barang</label>
+            <input type="text" class="form-control" placeholder="Masukkan harga barang" id="harga_barang" required>
+        </div>
+        <div class="col-mb-3">
+            <label class="form-label">Deskripsi</label>
+            <input type="text" class="form-control" placeholder="Masukkan deskripsi" id="deskripsi" required>
+        </div>
+        <div class="col-mb-3">
+            <button style="width:90%;" type="submit" class="btn btn-primary"><a href="{% url 'wishlist:tambah_wishlist' %}">Tambahkan</a></button>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+    $.getJSON("{% url 'wishlist:show_wishlist_json' %}", function(data){
+        $(data).each(function(key, value){
+        $("#wishlist_table > tbody").append($("<tr>")
+            .append($("<td>").append(value.fields.nama_barang))
+            .append($("<td>").append(value.fields.harga_barang))
+            .append($("<td>").append(value.fields.deskripsi)));
+    });
+    })  
+
+    $(document).on('submit', '#submit_wishlist', function(e) {
+      e.preventDefault();
+      $.ajax({
+        type:"POST",
+        url:"{% url 'wishlist:tambah_wishlist' %}",
+        data:{
+          nama_barang:$("#nama_barang").val(),
+          harga_barang:$("#harga_barang").val(),
+          deskripsi:$("#deskripsi").val(),
+          csrfmiddlewaretoken:'{{ csrf_token }}',
+        },
+        dataType: 'json',
+        success: function(response) {
+          alert("Wishlist berhasil ditambahkan!");
+          window.location.reload();
+        },
+        });
+        $("#wishlist_table > tbody").append($("<tr>")
+            .append($("<td>").append($("#nama_barang").val()))
+            .append($("<td>").append($("#harga_barang").val()))
+            .append($("<td>").append($("#deskripsi").val())));
+      });
+
+</script>
+    
+    
+
+<h5>Sesi terakhir login: {{ last_login }}</h5>
+{% endblock content %}

@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from wishlist.models import BarangWishlist
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.core import serializers
 from django.shortcuts import redirect
 from django.contrib.auth.forms import UserCreationForm
@@ -41,6 +41,31 @@ def show_wishlist_id(request, id):
         return HttpResponse(serializers.serialize("json", data), content_type="application/json")
     else:
         return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+
+def show_wishlist_ajax(request):
+    context = {
+    'nama': 'Dianisa Wulandari',
+    'npm': 'NPM 2106702150',
+    'last_login': request.COOKIES['last_login'],
+    } 
+    return render(request, "wishlist_ajax.html", context)
+
+def tambah_wishlist(request):
+    if request.method == 'POST':
+        nama_barang = request.POST.get('nama_barang')
+        harga_barang = request.POST.get('harga_barang')
+        deskripsi = request.POST.get('deskripsi')
+
+        wishlist_baru = BarangWishlist(
+            nama_barang=nama_barang,
+            harga_barang=harga_barang,
+            deskripsi=deskripsi,
+            )
+
+        wishlist_baru.save()
+        return render(request, 'wishlist_ajax.html')
+    return render(request, 'wishlist_ajax.html')
+
 
 def register(request):
     form = UserCreationForm()
